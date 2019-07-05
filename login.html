@@ -1,0 +1,22 @@
+<html lang="UTF-8">
+    <head>
+        <title>Login</title>
+    </head>
+    <body>
+    <div id="login-container">
+        <h1 class="title">Enter your username</h1>
+        <form id="loginForm" name="loginForm" method="POST">
+            <input type="text" name="username" id="username" />
+            <button type="button" onclick="login()">Login</button>
+        </form>
+    </div>
+    </body>
+    <script>
+        function login() {
+            var username = document.getElementById('username').value;
+            localStorage.setItem('username', username);
+            window.location.href = '/stomp-client/index.html';
+            return false;
+        }
+    </script>
+</html>
