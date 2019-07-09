@@ -15,8 +15,13 @@ function connect() {
     // username = document.querySelector('#username').innerText.trim();
     username = localStorage.getItem('username');
 
-    socket = new SockJS('http://localhost:1806/ws');
-    socket.sessionId = 'caokdhehe';
+    //socket = new SockJS('http://localhost:1806/ws');
+    socket = new SockJS('http://localhost:1806/ws', [], {
+        sessionId: (session) => {
+            console.log('Session = ', session);
+            return username;
+        }
+    });
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, onConnected, onError);
@@ -34,7 +39,10 @@ function onConnected(conn) {
     // Subscribe to the Public Topic
     stompClient.subscribe('/topic/publicChatRoom', onMessageReceived);
 
-    stompClient.subscribe('/topic/privateMessage/'+username, onMessageReceived);
+    // stompClient.subscribe('/topic/privateMessage/'+username, onMessageReceived);
+    // stompClient.subscribe('/user/'+username+'/queue/privateMessage', onMessageReceived);
+    // stompClient.subscribe('/user/'+username+'/queue/privateMessage', onMessageReceived);
+    stompClient.subscribe('/user/queue/privateMessage', onMessageReceived);
 
     if (username === 'cao') {
         stompClient.subscribe('/topic/weatherStation', onMessageReceived);
