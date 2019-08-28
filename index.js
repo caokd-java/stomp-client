@@ -9,6 +9,7 @@ var connectingElement = document.querySelector('#connecting');
 var stompClient = null;
 var username = null;
 var socket = null;
+var sessionId = null;
 
 
 function connect() {
@@ -16,10 +17,11 @@ function connect() {
     username = localStorage.getItem('username');
 
     //socket = new SockJS('http://localhost:1806/ws');
-    socket = new SockJS('http://localhost:1806/ws', [], {
-        sessionId: (session) => {
-            console.log('Session = ', session);
-            return username;
+    socket = new SockJS('http://localhost:8067/ws', [], {
+        sessionId: () => {
+            sessionId = uuidv4();
+            console.log('Session = ', sessionId);
+            return sessionId;
         }
     });
     stompClient = Stomp.over(socket);
@@ -27,22 +29,30 @@ function connect() {
     stompClient.connect({}, onConnected, onError);
 }
 
+function uuidv4() {
+    // 2015 version
+    // return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    //     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    //     return v.toString(16);
+    // });
+
+    // 2017 version
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    )
+}
+
 // Connect to WebSocket Server.
 connect();
 
 function onConnected(conn) {
-
-    console.log(stompClient);
-    console.log(conn.sessionId);
-    console.log(socket.sessionId);
-
     // Subscribe to the Public Topic
     stompClient.subscribe('/topic/publicChatRoom', onMessageReceived);
 
     // stompClient.subscribe('/topic/privateMessage/'+username, onMessageReceived);
     // stompClient.subscribe('/user/'+username+'/queue/privateMessage', onMessageReceived);
     // stompClient.subscribe('/user/'+username+'/queue/privateMessage', onMessageReceived);
-    stompClient.subscribe('/user/queue/privateMessage', onMessageReceived);
+    stompClient.subscribe('/user/queue/privateMessage', notification);
 
     if (username === 'cao') {
         stompClient.subscribe('/topic/weatherStation', onMessageReceived);
@@ -96,6 +106,29 @@ function sendMessagePrivate(event) {
     //event.preventDefault();
 }
 
+function sendNotification(event) {
+    var messageContent = messageInput.value.trim();
+    if(messageContent && stompClient) {
+        var chatMessage = {
+            requestId: sessionId,
+            roadId: 1,
+            timestamp: null,
+            deviceTypeId: 1,
+            deviceSubType: 2,
+            deviceId: 1
+        };
+        stompClient.send("/app/chat.sendMessage.own", {}, JSON.stringify(chatMessage));
+        messageInput.value = '';
+    }
+    //event.preventDefault();
+}
+
+function notification(payload) {
+    var result = JSON.parse(payload.body);
+    console.log(result);
+
+    // push into redux
+}
 
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);

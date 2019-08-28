@@ -1,0 +1,105 @@
+[
+  {
+    "timestamp": "2019-07-25T07:04:34.967+0000",
+    "status": {
+      "code": 200,
+      "type": "success",
+      "message": "Success",
+      "error": false
+    },
+    "errors": [],
+    "data": [
+      {
+        "id": "TC_30_600",
+        "deviceName": "TC 30 + 600km",
+        "deviceStatus": 1,
+        "registration": "registered",
+        "lastUpdate": "20/04/2019 10:20:00",
+        "ipAddress": "192.168.1.1",
+        "port": 1,
+        "latitude": 17.87836,
+        "longitude": 47.25908,
+        "atKilometers": 10,
+        "atMeters": 500,
+        "motorway": "M44"
+      }
+    ],
+    "path": "/devices/TC_44_400"
+  },
+
+  {
+    "status": {
+      "error": true,
+      "code": 400,
+      "type": "bad request",
+      "message": "Bad Request"
+    }
+  },
+
+  {
+    "status": {
+      "error": true,
+      "code": 404,
+      "type": "not found",
+      "message": "Not Found"
+    }
+  },
+
+  {
+    "status": {
+      "error": true,
+      "code": 500,
+      "type": "internal server",
+      "message": "Internal Server Error"
+    }
+  },
+
+  {
+    "status": {
+      "error": true,
+      "code": 501,
+      "type": "not implemented",
+      "message": "Not implemented"
+    }
+  },
+
+  {
+    "status": {
+      "error": true,
+      "code": 503,
+      "type": "server unavailable",
+      "message": "Service Unavailable"
+    }
+  },
+
+  {
+    "status": {
+      "error": false,
+      "code": 200,
+      "type": "success",
+      "message": "Success"
+    }
+  },
+
+  {
+    "timestamp": "2019-07-25T07:04:34.967+0000",
+    "status": 408,
+    "error": "Request timeout",
+    "message": "The server timed out waiting for the request",
+    "path": "/device/sync"
+  },
+
+  {
+    "timestamp": "2019-07-25T07:04:34.967+0000",
+    "status": {
+      "code": 200,
+      "type": "success",
+      "message": "Success",
+      "error": false,
+    },
+    "errors": [],
+    "data": [],
+    "path": "/devices/TC_44_400"
+  }
+
+]
